@@ -1,12 +1,10 @@
 #include "raylib.h"
-
 #include "globals.h"
-#include "level.h"
 #include "player.h"
-#include "enemy.h"
 #include "graphics.h"
+#include "enemies_controller.h"
+#include "level.h"
 #include "assets.h"
-#include "utilities.h"
 
 void update_game() {
     game_frame++;
@@ -16,26 +14,31 @@ void update_game() {
             if (IsKeyPressed(KEY_ENTER)) {
                 SetExitKey(0);
                 game_state = GAME_STATE;
-                load_level(0);
+                LevelController::get_instance().load_level(0);
             }
             break;
 
         case GAME_STATE:
             if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-                move_player_horizontally(PLAYER_MOVEMENT_SPEED);
+                Player::get_instance().move_player_horizontally(PLAYER_MOVEMENT_SPEED);
             }
 
             if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-                move_player_horizontally(-PLAYER_MOVEMENT_SPEED);
+                Player::get_instance().move_player_horizontally(-PLAYER_MOVEMENT_SPEED);
             }
 
             // Calculating collisions to decide whether the player is allowed to jump
-            is_player_on_ground = is_colliding({player_pos.x, player_pos.y + 0.1f}, WALL);
-            if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE)) && is_player_on_ground) {
+        Player::get_instance().set_is_player_on_ground(
+        LevelController::get_instance().is_colliding(
+    {Player::get_instance().get_player_posX(), Player::get_instance().get_player_posY() + 0.1f},
+    WALL
+            )
+        );
+            if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE)) && Player::get_instance().is_player_on_ground()) {
                 player_y_velocity = -JUMP_STRENGTH;
             }
 
-            update_player();
+            Player::get_instance().update_player();
             EnemiesController::get_instance().update_enemies();
 
             if (IsKeyPressed(KEY_ESCAPE)) {
@@ -50,11 +53,11 @@ void update_game() {
             break;
 
         case DEATH_STATE:
-            update_player_gravity();
+            Player::get_instance().update_player_gravity();
 
             if (IsKeyPressed(KEY_ENTER)) {
                 if (player_lives > 0) {
-                    load_level(0);
+                    LevelController::get_instance().load_level(0);
                     game_state = GAME_STATE;
                 }
                 else {
@@ -66,17 +69,17 @@ void update_game() {
 
         case GAME_OVER_STATE:
             if (IsKeyPressed(KEY_ENTER)) {
-                reset_level_index();
-                reset_player_stats();
+                LevelController::get_instance().reset_level_index();
+                Player::get_instance().reset_player_stats();
                 game_state = GAME_STATE;
-                load_level(0);
+                LevelController::get_instance().load_level();
             }
             break;
 
         case VICTORY_STATE:
             if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE)) {
-                reset_level_index();
-                reset_player_stats();
+                LevelController::get_instance().reset_level_index();
+                Player::get_instance().reset_player_stats();
                 game_state = MENU_STATE;
                 SetExitKey(KEY_ESCAPE);
             }
@@ -121,15 +124,15 @@ void draw_game() {
 
 int main() {
     SetConfigFlags(FLAG_VSYNC_HINT);
-    InitWindow(1024, 480, "Platformer");
+    InitWindow(1024, 500, "Platformer");
     SetTargetFPS(60);
     HideCursor();
 
     load_fonts();
     load_images();
     load_sounds();
-    load_level();
-
+    LevelController::get_instance().loadLevelsFromFile("data/levels.rll");
+    LevelController::get_instance().load_level();
     while (!WindowShouldClose()) {
         BeginDrawing();
 
@@ -139,7 +142,8 @@ int main() {
         EndDrawing();
     }
 
-    unload_level();
+
+    LevelController::get_instance().unload_level();
     unload_sounds();
     unload_images();
     unload_fonts();

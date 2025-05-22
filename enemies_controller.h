@@ -24,7 +24,7 @@ public:
 
     void spawn_enemies();
     void update_enemies();
-    [[nodiscard]] bool is_colliding_with_enemies(Vector2 pos) const;
+    bool is_colliding_with_enemies(Vector2 pos) const;
     void remove_colliding_enemy(Vector2 pos);
 
 private:

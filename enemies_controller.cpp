@@ -6,16 +6,16 @@ void EnemiesController::spawn_enemies() {
     // Create enemies, incrementing their amount every time a new one is created
     enemies.clear();
 
-    for (size_t row = 0; row < current_level.rows; ++row) {
-        for (size_t column = 0; column < current_level.columns; ++column) {
-            if (const char cell = get_level_cell(row, column); cell == ENEMY) {
+    for (size_t row = 0; row < LevelController::get_instance().get_current_level().get_rows(); ++row) {
+        for (size_t column = 0; column < LevelController::get_instance().get_current_level().get_columns(); ++column) {
+            if (char cell = Level::get_level_cell(row, column); cell == ENEMY) {
                 // Instantiate and add an enemy to the level
                 enemies.push_back({
                         {static_cast<float>(column), static_cast<float>(row)},
                         true
                 });
 
-                set_level_cell(row, column, AIR);
+                LevelController::get_instance().set_level_cell(row, column, AIR);
             }
         }
     }
@@ -25,10 +25,10 @@ void EnemiesController::update_enemies() {
     for (auto &enemy : enemies) {
         // Find the enemy's next x
         float next_x = enemy.get_pos().x;
-        next_x += enemy.is_looking_right() ? ENEMY_MOVEMENT_SPEED : -ENEMY_MOVEMENT_SPEED;
+        next_x += (enemy.is_looking_right() ? ENEMY_MOVEMENT_SPEED : -ENEMY_MOVEMENT_SPEED);
 
         // If its next position collides with a wall, turn around
-        if (is_colliding({next_x, enemy.get_pos().y}, WALL)) {
+        if (LevelController::get_instance().is_colliding({next_x, enemy.get_pos().y}, WALL)) {
             enemy.set_looking_right(!enemy.is_looking_right());
         }
         // Otherwise, keep moving
@@ -55,9 +55,8 @@ void EnemiesController::remove_colliding_enemy(const Vector2 pos) {
     const Rectangle entity_hitbox = {pos.x, pos.y, 1.0f, 1.0f};
 
     for (auto it = enemies.begin(); it != enemies.end(); ++it) {
-        Rectangle enemy_hitbox = {it->get_pos().x,it->get_pos().y, 1.0f, 1.0f};
         // Erase a colliding enemy
-        if (CheckCollisionRecs(entity_hitbox, enemy_hitbox)) {
+        if (const Rectangle enemy_hitbox = {(float) it->get_pos().x, (float) it->get_pos().y, 1.0f, 1.0f}; CheckCollisionRecs(entity_hitbox, enemy_hitbox)) {
             enemies.erase(it);
 
             // Call the function again to remove any remaining colliding enemies

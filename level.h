@@ -1,6 +1,87 @@
 #ifndef LEVEL_H
 #define LEVEL_H
+#include <cstddef>
+#include "raylib.h"
+#include <string>
+#include <vector>
 
+class Level {
+public:
+    Level(const size_t rows, const size_t columns, char* data)
+    : rows(rows), columns(columns), data(data) {};
+    Level() : rows{0}, columns{0}, data(nullptr) {};
+
+    [[nodiscard]] size_t get_rows() const {
+        return rows;
+    }
+    void set_rows(size_t rows) {
+        this->rows = rows;
+    }
+    [[nodiscard]] size_t get_columns() const {
+        return columns;
+    }
+    void set_columns(size_t columns) {
+        this->columns = columns;
+    }
+    [[nodiscard]] const char* get_data() const {
+        return data;
+    }
+    void set_data(char *data) {
+        this->data = data;
+    }
+    static char& get_level_cell(size_t row, size_t column);
+
+private:
+    size_t rows;
+    size_t columns;
+    char *data = nullptr;
+};
+
+class LevelController {
+public:
+    [[nodiscard]] std::vector<Level> get_levels() const {
+        return LEVELS;
+    }
+    void set_levels(const std::vector<Level> &levels) {
+        LEVELS = levels;
+    }
+    Level &get_current_level() {
+        return current_level;
+    }
+    [[nodiscard]] char * get_current_level_data() const {
+        return current_level_data;
+    }
+    static LevelController &get_instance() {
+        static LevelController instance;
+        return instance;
+    };
+    LevelController(const LevelController&) = delete;
+    LevelController operator=(const LevelController&) = delete;
+    LevelController(LevelController&&) = delete;
+    LevelController operator=(LevelController&&) = delete;
+
+    bool is_inside_level(int row, int column);
+    bool is_colliding(Vector2 pos, char look_for);
+    char& get_collider(Vector2 pos, char look_for);
+    static void reset_level_index();
+    void load_level(int offset = 0);
+
+    static void unload_level();
+
+    void set_level_cell(size_t row,  size_t column, char chr);
+    void set_current_level(const Level &current_level);
+    Level parseLevelRLE(const std::string& rleData);
+    std::vector<Level> loadLevelsFromFile(const std::string& filename);
+
+private:
+    LevelController() = default;
+    ~LevelController() = default;
+    Level current_level;
+    char* current_level_data;
+    std::vector<Level> LEVELS;
+};
+
+/*
 #include "globals.h"
 
 bool is_inside_level(int row, int column) {
@@ -78,7 +159,7 @@ void load_level(int offset) {
     current_level = {rows, columns, current_level_data};
 
     // Instantiate entities
-    spawn_player();
+    Player::get_instance().spawn_player();
     EnemiesController::get_instance().spawn_enemies();
 
     // Calculate positioning and sizes
@@ -100,5 +181,5 @@ char& get_level_cell(size_t row, size_t column) {
 void set_level_cell(size_t row, size_t column, char chr) {
     get_level_cell(row, column) = chr;
 }
-
+*/
 #endif //LEVEL_H

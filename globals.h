@@ -19,8 +19,10 @@ inline const char WALL      = '#',
                   COIN      = '*',
                   EXIT      = 'E';
 
-/* Levels */
+#include "level.h"
 
+/* Levels */
+/*
 struct level {
     size_t rows = 0, columns = 0;
     char *data = nullptr;
@@ -85,19 +87,20 @@ inline level LEVEL_3 = {
         12, 86,
         LEVEL_3_DATA
 };
-
+*/
 inline int level_index = 0;
-inline const int LEVEL_COUNT = 3;
 
+inline const int LEVEL_COUNT = 3;
+/*
 inline level LEVELS[LEVEL_COUNT] = {
         LEVEL_1, LEVEL_2, LEVEL_3
 };
-
+*/
 /* Loaded Level Data */
-
+/*
 inline level current_level;
 inline char *current_level_data;
-
+*/
 /* Timer-mechanic related */
 inline const int MAX_LEVEL_TIME = 50 * 60;
 inline int timer = MAX_LEVEL_TIME;
@@ -115,17 +118,18 @@ inline const float GRAVITY_FORCE         = 0.01f;
 /* Player data */
 
 inline float player_y_velocity = 0;
+inline const int MAX_PLAYER_LIVES = 3;
+inline int player_lives = MAX_PLAYER_LIVES;
+inline int player_level_scores[LEVEL_COUNT];
+/*
 inline Vector2 player_pos;
 
 inline bool is_player_on_ground;
 inline bool is_looking_forward;
 inline bool is_moving;
 
-inline int player_level_scores[LEVEL_COUNT];
-
-inline const int MAX_PLAYER_LIVES = 3;
-inline int player_lives = MAX_PLAYER_LIVES;
-
+*/
+#include "player.h"
 /* Enemy data */
 /*
 struct Enemy {
@@ -337,7 +341,7 @@ char& get_level_cell(size_t row, size_t column);
 void set_level_cell(size_t row, size_t column, char chr);
 
 // PLAYER_H
-
+/*
 void reset_player_stats();
 void increment_player_score();
 int get_total_player_score();
@@ -346,7 +350,7 @@ void kill_player();
 void move_player_horizontally(float delta);
 void update_player();
 void update_player_gravity();
-
+*/
 // ENEMY_H
 /*
 void spawn_enemies();
