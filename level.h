@@ -79,7 +79,7 @@ void load_level(int offset) {
 
     // Instantiate entities
     spawn_player();
-    spawn_enemies();
+    EnemiesController::get_instance().spawn_enemies();
 
     // Calculate positioning and sizes
     derive_graphics_metrics_from_loaded_level();
