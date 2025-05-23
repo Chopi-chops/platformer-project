@@ -1,9 +1,5 @@
 #include "globals.h"
-#include "player.h"
-#include  "enemies_controller.h"
-#include "level.h"
 
-#include "player.h"
 void Player::reset_player_stats() {
     player_lives = MAX_PLAYER_LIVES;
     for (int i = 0; i < LEVEL_COUNT; i++) {

@@ -2,12 +2,6 @@
 #define PLAYER_H
 
 #include "globals.h"
-#include "level.h"
-#include <vector>
-#include <raylib.h>
-
-#include "globals.h"
-#include "level.h"
 
 class Player {
 public:

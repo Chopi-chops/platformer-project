@@ -20,6 +20,8 @@ inline const char WALL      = '#',
                   EXIT      = 'E';
 
 #include "level.h"
+#include "player.h"
+#include "enemies_controller.h"
 
 /* Levels */
 /*
@@ -129,7 +131,6 @@ inline bool is_looking_forward;
 inline bool is_moving;
 
 */
-#include "player.h"
 /* Enemy data */
 /*
 struct Enemy {
@@ -139,8 +140,6 @@ struct Enemy {
 
 inline std::vector<Enemy> enemies;
 */
-
-#include "enemies_controller.h"
 
 /* Graphic Metrics */
 
@@ -328,7 +327,7 @@ void draw_victory_menu_background();
 void draw_victory_menu();
 
 // LEVEL_H
-
+/*
 bool is_inside_level(int row, int column);
 bool is_colliding(Vector2 pos, char look_for = '#');
 char& get_collider(Vector2 pos, char look_for);
@@ -339,7 +338,7 @@ void unload_level();
 
 char& get_level_cell(size_t row, size_t column);
 void set_level_cell(size_t row, size_t column, char chr);
-
+*/
 // PLAYER_H
 /*
 void reset_player_stats();

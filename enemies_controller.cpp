@@ -1,5 +1,3 @@
-#include "enemies_controller.h"
-
 #include "globals.h"
 
 void EnemiesController::spawn_enemies() {

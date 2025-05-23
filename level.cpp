@@ -1,9 +1,4 @@
-#include "level.h"
-#include "enemies_controller.h"
-#include "level.h"
-#include "raylib.h"
 #include "globals.h"
-#include "player.h"
 #include <fstream>
 
 bool LevelController::is_inside_level(int row, int column) {

@@ -2,8 +2,6 @@
 #define ENEMIES_CONTROLLER_H
 
 #include "globals.h"
-#include <raylib.h>
-#include <vector>
 #include "enemy.h"
 
 class EnemiesController {

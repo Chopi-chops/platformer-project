@@ -2,8 +2,6 @@
 #define GRAPHICS_H
 
 #include "globals.h"
-#include "enemies_controller.h"
-#include "player.h"
 #include "utilities.h"
 
 void draw_text(Text &text) {
