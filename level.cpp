@@ -2,8 +2,8 @@
 #include <fstream>
 
 bool LevelController::is_inside_level(int row, int column) {
-    if (row < 0 || row >= LevelController::get_instance().get_current_level().get_rows()) return false;
-    if (column < 0 || column >= LevelController::get_instance().get_current_level().get_columns()) return false;
+    if (row < 0 || row >= get_instance().get_current_level().get_rows()) return false;
+    if (column < 0 || column >= get_instance().get_current_level().get_columns()) return false;
     return true;
 }
 
@@ -14,7 +14,7 @@ bool LevelController::is_colliding(Vector2 pos, char look_for) {
     for (int row = pos.y - 1; row < pos.y + 1; ++row) {
         for (int column = pos.x - 1; column < pos.x + 1; ++column) {
             // Check if the cell is out-of-bounds
-            if (!LevelController::get_instance().is_inside_level(row, column)) continue;
+            if (!get_instance().is_inside_level(row, column)) continue;
             if (Level::get_level_cell(row, column) == look_for) {
                 Rectangle block_hitbox = {(float) column, (float) row, 1.0f, 1.0f};
                 if (CheckCollisionRecs(entity_hitbox, block_hitbox)) {
@@ -33,7 +33,7 @@ char& LevelController::get_collider(Vector2 pos, char look_for) {
     for (int row = pos.y - 1; row < pos.y + 1; ++row) {
         for (int column = pos.x - 1; column < pos.x + 1; ++column) {
             // Check if the cell is out-of-bounds
-            if (!LevelController::get_instance().is_inside_level(row, column)) continue;
+            if (!get_instance().is_inside_level(row, column)) continue;
             if (Level::get_level_cell(row, column) == look_for) {
                 Rectangle block_hitbox = {(float) column, (float) row, 1.0f, 1.0f};
                 if (CheckCollisionRecs(player_hitbox, block_hitbox)) {
@@ -75,7 +75,7 @@ void LevelController::load_level(int offset) {
             current_level_data[row * columns + column] = source_data[row * columns + column];
         }
     }
-    LevelController::get_instance().set_current_level(Level{rows, columns, current_level_data});
+    get_instance().set_current_level(Level{rows, columns, current_level_data});
     // Instantiate entities
     Player::get_instance().spawn_player();
     EnemiesController::get_instance().spawn_enemies();
@@ -88,7 +88,7 @@ void LevelController::load_level(int offset) {
 }
 
 void LevelController::unload_level() {
-    delete[] LevelController::get_instance().get_current_level_data();
+    delete[] get_instance().get_current_level_data();
 }
 // Getters and setters
 
